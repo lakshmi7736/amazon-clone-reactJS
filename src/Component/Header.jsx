@@ -28,10 +28,6 @@ const Header = () =>  {
                     <input type="text" className="search-input" />
                     <div className="search-icon"></div>
                 </div>
-
-                <div className="search-container ">
-                    <div className="menu-icon"></div>
-                </div>
                 
                  {/* language */}
                 <div className="language-container border-white">
