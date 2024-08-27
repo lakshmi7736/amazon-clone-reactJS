@@ -28,6 +28,10 @@ const Header = () =>  {
                     <input type="text" className="search-input" />
                     <div className="search-icon"></div>
                 </div>
+
+                <div className="search-container ">
+                    <div className="menu-icon"></div>
+                </div>
                 
                  {/* language */}
                 <div className="language-container border-white">
@@ -72,9 +76,11 @@ const Header = () =>  {
 
             </div>
             <div className="navbar__footer">
-                    <div className="navbar__footer_text">
-                        <strong>All</strong></div>
-                    <div className="navbar__footer_text">Fresh</div>
+                    <div className="navbar__footer_text menu-icon">
+                        <div className="icon"></div>
+                        <strong>All</strong>
+                    </div>
+                   <div className="navbar__footer_text">Fresh</div>
                     <div className="navbar__footer_text">Amazon miniTV</div>
                     <div className="navbar__footer_text">Sell</div>
                     <div className="navbar__footer_text">Best Seller</div>

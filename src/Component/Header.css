@@ -205,6 +205,28 @@ body{
     overflow: hidden;
 }
 
+/* .navbar__footer_text {
+    display: flex;
+    align-items: center; 
+    margin: 6px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.menu-icon {
+    display: flex;
+    align-items: center; 
+    gap: 5px;
+}
+
+.icon {
+    width: 27px;
+    height: 27px;
+    background-color: rgb(247, 176, 34);
+    background-image: url('https://m.media-amazon.com/images/G/31/gno/sprites/nav-sprite-global-1x-hm-dsk-reorg._CB405936311_.png');
+    background-repeat: no-repeat;
+    background-position: -165px -253px; 
+} */
 
 
 .navbar__footer {
@@ -224,6 +246,16 @@ body{
     font-size: 0.9rem;
     white-space: nowrap; 
 }
-.menu {
-    background-image: url('https://m.media-amazon.com/images/G/31/gno/sprites/nav-sprite-global-1x-hm-dsk-reorg._CB405936311_.png'); 
+.menu-icon {
+    display: flex;
+    align-items: center; 
+    gap: 2px;
 }
+
+.icon {
+    width: 22px;
+    height: 19px;
+    background-image: url('https://m.media-amazon.com/images/G/31/gno/sprites/nav-sprite-global-1x-hm-dsk-reorg._CB405936311_.png');
+    background-repeat: no-repeat;
+    background-position: -170px -253px; 
+} 
