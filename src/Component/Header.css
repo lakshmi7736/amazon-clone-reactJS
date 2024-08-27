@@ -40,18 +40,27 @@ body{
 }
 /* logo */
 .logo{
-    width: 120px;
+    width: 107px;
     height: 50px;
     background: url('https://m.media-amazon.com/images/G/31/gno/sprites/nav-sprite-global-1x-hm-dsk-reorg._CB405936311_.png');
     background-repeat: no-repeat;
     background-position-y: -40px;
     overflow: hidden;
+    display: flex;
 }
 .dotIn {
-    position: absolute;
-    top: 0; 
-    right: 0; 
-    transform: translate(50%, -50%); 
+    cursor: pointer;
+    font-size :13.5px;
+    font-weight :500;
+    margin-bottom :0px;
+    margin-left: 0px;
+    margin-right :4px;
+    margin-top :-1px;
+    pointer-events :none;
+    text-size-adjust: 100%;
+    width: 14.7344px;
+    position: relative;
+
 }
 
 .border-white{
