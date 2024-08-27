@@ -6,8 +6,7 @@ function App() {
   return (
     //BEM convention
     <div className='app'>
-           {/* Header */}
-          <Header />
+      <Header />
 
     </div>
   )
