@@ -52,7 +52,7 @@ const NestedSubCategories = () => {
 
   const fetchNestedSubCategories = async () => {
     try {
-      const response = await api.get(`/api/nestedSubCategories/all-nested-sub-categories?page=${page}`);
+      const response = await api.get(`/api/nested-subcategory-requests/all-nested-sub-categories?page=${page}`);
       setNestedSubCategories(response.data);
     } catch (error) {
       console.error('Error fetching nested subcategories:', error);

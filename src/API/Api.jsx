@@ -8,10 +8,3 @@ export const api=axios.create({
         "Content-Type":"application/json"
     }
 })
-
-export const data=axios.create({
-    baseURL: BASE_URL,
-    headers:{
-        'Content-Type': 'multipart/form-data',
-    }
-})

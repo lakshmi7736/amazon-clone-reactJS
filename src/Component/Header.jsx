@@ -2,6 +2,7 @@ import React from "react";
 import "./Header.css";
 import indFlag from '../assets/images/indFlag.png'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import { Link } from "react-router-dom";
 
 const Header = () =>  {  
   return (
@@ -81,7 +82,9 @@ const Header = () =>  {
 
                    </div>
                     <div className="navbar__footer_text border-white">Amazon miniTV</div>
-                    <div className="navbar__footer_text border-white">Sell</div>
+                    <div className="navbar__footer_text border-white">
+                        <Link to="/signin" style={{ textDecoration: 'none', color: 'inherit' }}>Sell</Link>
+                    </div>                   
                     <div className="navbar__footer_text border-white">Best Seller</div>
                     <div className="navbar__footer_text border-white">Today's Deals</div>
                     <div className="navbar__footer_text border-white">Mobiles</div>

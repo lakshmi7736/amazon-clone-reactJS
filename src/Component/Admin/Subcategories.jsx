@@ -46,7 +46,7 @@ const SubCategories = () => {
   // Fetch subcategories
   const fetchSubCategories = async () => {
     try {
-      const response = await api.get(`/api/subCategories/all-sub-categories?page=${page}`);
+      const response = await api.get(`/api/subcategory-requests/all-sub-categories?page=${page}`);
       setSubCategories(response.data);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
