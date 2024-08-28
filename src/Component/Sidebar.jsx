@@ -18,7 +18,7 @@ const Sidebar = () => {
                     </ul>
                 </li>
             </ul>
-
+            
             <div className="filter-section">
                 <h5>Made for Amazon Brands</h5>
                 <label>
