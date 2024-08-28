@@ -1,6 +1,5 @@
 import './App.css'
-import CategoryForm from './Component/Admin/CategoryForm';
-import CategoryList from './Component/Admin/CategoryList';
+import Categories from './Component/Admin/Categories';
 // import Header from './Component/Header'
 // import ProductPage from './Component/data/products';
 // import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -10,8 +9,9 @@ function App() {
 
   return (
     <div className="App">
-      <CategoryForm />
-      <CategoryList />
+      <Categories />
+      {/* <CategoryForm />
+      <CategoryList /> */}
 
       {/* commenting to check with admin */}
         {/* Header component */}
