@@ -23,15 +23,14 @@ import {
 const SubCategories = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [newSubCategory, setNewSubCategory] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [newSubCategory, setNewSubCategory] = useState(''); // Ensure it's always an empty string initially
+  const [selectedCategory, setSelectedCategory] = useState(''); // Ensure it's always an empty string initially
   const [page, setPage] = useState(0);
   const [categoryPage, setCategoryPage] = useState(0); // For category pagination
   const [editingSubCategory, setEditingSubCategory] = useState(null);
   const [editingName, setEditingName] = useState('');
   const [editingCategory, setEditingCategory] = useState('');
   const dropdownRef = useRef(null); // Ref for dropdown
-  
 
   useEffect(() => {
     fetchSubCategories();
@@ -47,22 +46,17 @@ const SubCategories = () => {
       const response = await api.get(`/api/subCategories/all-sub-categories?page=${page}`);
       setSubCategories(response.data);
     } catch (error) {
-      console.error("Error fetching subcategories:", error);
+      console.error('Error fetching subcategories:', error);
     }
   };
 
   // Fetch categories for the dropdown with pagination
-  const fetchCategories = async (direction = 'next') => {
+  const fetchCategories = async () => {
     try {
       const response = await api.get(`/api/categories/all-categories?page=${categoryPage}`);
-      const newCategories = response.data;
-      if (direction === 'next') {
-        setCategories(newCategories);
-      } else {
-        setCategories(newCategories);
-      }
+      setCategories(response.data);
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error('Error fetching categories:', error);
     }
   };
 
@@ -73,8 +67,6 @@ const SubCategories = () => {
     } else {
       setCategoryPage((prevPage) => Math.max(prevPage - 1, 0));
     }
-    // Keep dropdown open
-    dropdownRef.current.focus();
   };
 
   // Create subcategory
@@ -84,24 +76,27 @@ const SubCategories = () => {
         subCategoryName: newSubCategory,
         categoryId: { id: selectedCategory }
       });
-      setNewSubCategory('');
-      setSelectedCategory('');
+      setNewSubCategory(''); // Reset to empty string to maintain controlled state
+      setSelectedCategory(''); // Reset to empty string to maintain controlled state
       fetchSubCategories();
     } catch (error) {
-      console.error("Error creating subcategory:", error);
+      console.error('Error creating subcategory:', error);
     }
   };
 
   // Update subcategory
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/subCategories/${id}`, { subCategoryName: editingName, categoryId: { id: editingCategory } });
+      await api.put(`/api/subCategories/${id}`, {
+        subCategoryName: editingName,
+        categoryId: { id: editingCategory }
+      });
       setEditingSubCategory(null);
       setEditingName('');
       setEditingCategory('');
       fetchSubCategories();
     } catch (error) {
-      console.error("Error updating subcategory:", error);
+      console.error('Error updating subcategory:', error);
     }
   };
 
@@ -111,7 +106,7 @@ const SubCategories = () => {
       await api.delete(`/api/subCategories/${id}`);
       fetchSubCategories();
     } catch (error) {
-      console.error("Error deleting subcategory:", error);
+      console.error('Error deleting subcategory:', error);
     }
   };
 
@@ -135,22 +130,18 @@ const SubCategories = () => {
             <FormControl fullWidth>
               <InputLabel>Category</InputLabel>
               <Select
-                value={selectedCategory}
+                value={selectedCategory || ''} // Ensure controlled input
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                inputRef={dropdownRef} // Use ref to maintain focus
-                onClose={() => dropdownRef.current.focus()} // Keep dropdown open
+                inputRef={dropdownRef}
+                onClose={() => dropdownRef.current.focus()}
               >
                 {categories.map((category) => (
                   <MenuItem key={category.id} value={category.id}>
                     {category.name}
                   </MenuItem>
                 ))}
-                <MenuItem onClick={() => handleCategoryPageChange('prev')}>
-                  Previous
-                </MenuItem>
-                <MenuItem onClick={() => handleCategoryPageChange('next')}>
-                  Next
-                </MenuItem>
+                <MenuItem onClick={() => handleCategoryPageChange('prev')}>Previous</MenuItem>
+                <MenuItem onClick={() => handleCategoryPageChange('next')}>Next</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -184,7 +175,7 @@ const SubCategories = () => {
                       <FormControl fullWidth>
                         <InputLabel>Category</InputLabel>
                         <Select
-                          value={editingCategory}
+                          value={editingCategory || ''} // Ensure controlled input
                           onChange={(e) => setEditingCategory(e.target.value)}
                           inputRef={dropdownRef}
                           onClose={() => dropdownRef.current.focus()}
@@ -194,12 +185,8 @@ const SubCategories = () => {
                               {category.name}
                             </MenuItem>
                           ))}
-                          <MenuItem onClick={() => handleCategoryPageChange('prev')}>
-                            Previous
-                          </MenuItem>
-                          <MenuItem onClick={() => handleCategoryPageChange('next')}>
-                            Next
-                          </MenuItem>
+                          <MenuItem onClick={() => handleCategoryPageChange('prev')}>Previous</MenuItem>
+                          <MenuItem onClick={() => handleCategoryPageChange('next')}>Next</MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
@@ -207,7 +194,14 @@ const SubCategories = () => {
                       <IconButton onClick={() => handleUpdate(subCategory.id)} color="primary">
                         <SaveIcon />
                       </IconButton>
-                      <IconButton onClick={() => { setEditingSubCategory(null); setEditingName(''); setEditingCategory(''); }} color="secondary">
+                      <IconButton
+                        onClick={() => {
+                          setEditingSubCategory(null);
+                          setEditingName('');
+                          setEditingCategory('');
+                        }}
+                        color="secondary"
+                      >
                         <CancelIcon />
                       </IconButton>
                     </Grid>
@@ -215,10 +209,19 @@ const SubCategories = () => {
                 ) : (
                   <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                      <Typography variant="body1">{subCategory.subCategoryName} - {subCategory.categoryId.name}</Typography>
+                      <Typography variant="body1">
+                        {subCategory.subCategoryName} - {subCategory.categoryId.name}
+                      </Typography>
                     </Grid>
                     <Grid item>
-                      <IconButton onClick={() => { setEditingSubCategory(subCategory.id); setEditingName(subCategory.subCategoryName); setEditingCategory(subCategory.categoryId.id); }} color="primary">
+                      <IconButton
+                        onClick={() => {
+                          setEditingSubCategory(subCategory.id);
+                          setEditingName(subCategory.subCategoryName);
+                          setEditingCategory(subCategory.categoryId.id);
+                        }}
+                        color="primary"
+                      >
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleDelete(subCategory.id)} color="secondary">
@@ -234,7 +237,12 @@ const SubCategories = () => {
       </Paper>
 
       <Grid container justifyContent="center" style={{ marginTop: '20px' }}>
-        <Button variant="outlined" disabled={page <= 0} onClick={() => setPage(page - 1)} style={{ marginRight: '10px' }}>
+        <Button
+          variant="outlined"
+          disabled={page <= 0}
+          onClick={() => setPage(page - 1)}
+          style={{ marginRight: '10px' }}
+        >
           Prev
         </Button>
         <Button variant="outlined" onClick={() => setPage(page + 1)}>
