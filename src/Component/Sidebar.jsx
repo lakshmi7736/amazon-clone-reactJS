@@ -4,11 +4,11 @@ import './Sidebar.css';
 const Sidebar = () => {
     return (
         <div className="sidebar">
-            <h3>Category</h3>
+            <h5>Category</h5>
             <ul>
                 <li><a href="#electronics">Electronics</a></li>
                 <li className="sub-category">
-                    <a href="#mobiles-accessories">Mobiles & Accessories</a>
+                    <h5 href="#mobiles-accessories">Mobiles & Accessories</h5>
                     <ul>
                         <li><a href="#mobile-accessories">Mobile Accessories</a></li>
                         <li><a href="#mobile-broadband-devices">Mobile Broadband Devices</a></li>
@@ -20,7 +20,7 @@ const Sidebar = () => {
             </ul>
 
             <div className="filter-section">
-                <h4>Made for Amazon Brands</h4>
+                <h5>Made for Amazon Brands</h5>
                 <label>
                     <input type="checkbox" />
                     Made for Amazon
@@ -28,27 +28,14 @@ const Sidebar = () => {
             </div>
 
             <div className="filter-section">
-                <h4>Amazon Prime</h4>
+                <h5>Amazon Prime</h5>
                 <label>
                     <input type="checkbox" />
                     <span className="prime">prime</span>
                 </label>
             </div>
-
             <div className="filter-section">
-                <h4>Delivery Day</h4>
-                <label>
-                    <input type="checkbox" />
-                    Get It Today
-                </label>
-                <label>
-                    <input type="checkbox" />
-                    Get It by Tomorrow
-                </label>
-            </div>
-
-            <div className="filter-section">
-                <h4>Pay On Delivery</h4>
+                <h5>Pay On Delivery</h5>
                 <label>
                     <input type="checkbox" />
                     Eligible for Pay On Delivery
@@ -56,7 +43,7 @@ const Sidebar = () => {
             </div>
 
             <div className="filter-section">
-                <h4>Brand</h4>
+                <h5>Brand</h5>
                 <label>
                     <input type="checkbox" />
                     Redmi
@@ -89,7 +76,7 @@ const Sidebar = () => {
 
 
             <div className="filter-section">
-                <h4>Avg. Customer Review</h4>
+                <h5>Avg. Customer Review</h5>
                 <div className="rating">
                     <span>★★★★☆</span> & Up
                 </div>
@@ -104,7 +91,7 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="filter-section">
-                <h4>Price</h4>
+                <h5>Price</h5>
                 <ul>
                     <li>Under ₹1,000</li>
                     <li>₹1,000 - ₹5,000</li>
@@ -115,7 +102,7 @@ const Sidebar = () => {
             </div>
 
             <div className="filter-section">
-                <h4>Seller</h4>
+                <h5>Seller</h5>
                 <label>
                     <input type="checkbox" />
                     Redmi

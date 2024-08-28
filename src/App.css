@@ -1,4 +1,4 @@
-.App {
+ .App {
     display: flex;
     flex-direction: column;
   }
@@ -9,14 +9,16 @@
   }
   
   .sidebar {
-    flex: 0 0 250px; /* Sidebar width */
-  }
-  
+    flex: 0 0 192px; /* Sidebar width */
+  } 
+   */
   .content {
     flex: 1;
     padding: 20px;
     background-color: #f8f8f8;
   }
-  
-/* .ProductGrid{
-}   */
+
+
+  .header {
+    flex-shrink: 0;
+  }
