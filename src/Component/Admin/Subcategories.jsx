@@ -1,7 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { api } from '../../API/Api';
-import { Container, Grid, Button, TextField, Typography, Paper, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon, Save as SaveIcon, Cancel as CancelIcon } from '@mui/icons-material';
+import {
+  Container,
+  Grid,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Save as SaveIcon,
+  Cancel as CancelIcon
+} from '@mui/icons-material';
 
 const SubCategories = () => {
   const [subCategories, setSubCategories] = useState([]);
@@ -9,33 +26,55 @@ const SubCategories = () => {
   const [newSubCategory, setNewSubCategory] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [page, setPage] = useState(0);
+  const [categoryPage, setCategoryPage] = useState(0); // For category pagination
   const [editingSubCategory, setEditingSubCategory] = useState(null);
   const [editingName, setEditingName] = useState('');
   const [editingCategory, setEditingCategory] = useState('');
+  const dropdownRef = useRef(null); // Ref for dropdown
+  
 
   useEffect(() => {
     fetchSubCategories();
-    fetchCategories(); // Fetch available categories for the dropdown
   }, [page]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [categoryPage]);
 
   // Fetch subcategories
   const fetchSubCategories = async () => {
     try {
-        const response = await api.get(`/api/subCategories/all-sub-categories?page=${page}`);
-        setSubCategories(response.data);
+      const response = await api.get(`/api/subCategories/all-sub-categories?page=${page}`);
+      setSubCategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
     }
   };
 
-  // Fetch categories for the dropdown
-  const fetchCategories = async () => {
+  // Fetch categories for the dropdown with pagination
+  const fetchCategories = async (direction = 'next') => {
     try {
-      const response = await api.get(`/api/categories/all-categories?page=${page}`);
-      setCategories(response.data);
+      const response = await api.get(`/api/categories/all-categories?page=${categoryPage}`);
+      const newCategories = response.data;
+      if (direction === 'next') {
+        setCategories(newCategories);
+      } else {
+        setCategories(newCategories);
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
+  };
+
+  // Handle pagination for the dropdown
+  const handleCategoryPageChange = (direction) => {
+    if (direction === 'next') {
+      setCategoryPage((prevPage) => prevPage + 1);
+    } else {
+      setCategoryPage((prevPage) => Math.max(prevPage - 1, 0));
+    }
+    // Keep dropdown open
+    dropdownRef.current.focus();
   };
 
   // Create subcategory
@@ -43,7 +82,7 @@ const SubCategories = () => {
     try {
       await api.post(`/api/subCategories`, {
         subCategoryName: newSubCategory,
-        categoryId: { id: selectedCategory } // Send as an object with 'id'
+        categoryId: { id: selectedCategory }
       });
       setNewSubCategory('');
       setSelectedCategory('');
@@ -52,12 +91,11 @@ const SubCategories = () => {
       console.error("Error creating subcategory:", error);
     }
   };
-  
 
   // Update subcategory
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/subCategories/${id}`, { subCategoryName: editingName, categoryId: {id :editingCategory} });
+      await api.put(`/api/subCategories/${id}`, { subCategoryName: editingName, categoryId: { id: editingCategory } });
       setEditingSubCategory(null);
       setEditingName('');
       setEditingCategory('');
@@ -99,12 +137,20 @@ const SubCategories = () => {
               <Select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
+                inputRef={dropdownRef} // Use ref to maintain focus
+                onClose={() => dropdownRef.current.focus()} // Keep dropdown open
               >
                 {categories.map((category) => (
                   <MenuItem key={category.id} value={category.id}>
                     {category.name}
                   </MenuItem>
                 ))}
+                <MenuItem onClick={() => handleCategoryPageChange('prev')}>
+                  Previous
+                </MenuItem>
+                <MenuItem onClick={() => handleCategoryPageChange('next')}>
+                  Next
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -140,12 +186,20 @@ const SubCategories = () => {
                         <Select
                           value={editingCategory}
                           onChange={(e) => setEditingCategory(e.target.value)}
+                          inputRef={dropdownRef}
+                          onClose={() => dropdownRef.current.focus()}
                         >
                           {categories.map((category) => (
                             <MenuItem key={category.id} value={category.id}>
                               {category.name}
                             </MenuItem>
                           ))}
+                          <MenuItem onClick={() => handleCategoryPageChange('prev')}>
+                            Previous
+                          </MenuItem>
+                          <MenuItem onClick={() => handleCategoryPageChange('next')}>
+                            Next
+                          </MenuItem>
                         </Select>
                       </FormControl>
                     </Grid>
@@ -161,10 +215,10 @@ const SubCategories = () => {
                 ) : (
                   <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
-                      <Typography variant="body1">{subCategory.subCategoryName}</Typography>
+                      <Typography variant="body1">{subCategory.subCategoryName} - {subCategory.categoryId.name}</Typography>
                     </Grid>
                     <Grid item>
-                      <IconButton onClick={() => { setEditingSubCategory(subCategory.id); setEditingName(subCategory.subCategoryName); setEditingCategory(subCategory.categoryId); }} color="primary">
+                      <IconButton onClick={() => { setEditingSubCategory(subCategory.id); setEditingName(subCategory.subCategoryName); setEditingCategory(subCategory.categoryId.id); }} color="primary">
                         <EditIcon />
                       </IconButton>
                       <IconButton onClick={() => handleDelete(subCategory.id)} color="secondary">
