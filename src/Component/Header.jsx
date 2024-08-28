@@ -71,27 +71,30 @@ const Header = () =>  {
                                 
 
             </div>
-            <div className="navbar__footer">
-                    <div className="navbar__footer_text menu-icon">
+            <div className="navbar__footer ">
+                    <div className="navbar__footer_text menu-icon border-white">
                         <div className="icon"></div>
                         <strong>All</strong>
                     </div>
-                   <div className="navbar__footer_text">Fresh</div>
-                    <div className="navbar__footer_text">Amazon miniTV</div>
-                    <div className="navbar__footer_text">Sell</div>
-                    <div className="navbar__footer_text">Best Seller</div>
-                    <div className="navbar__footer_text">Today's Deals</div>
-                    <div className="navbar__footer_text">Mobiles</div>
-                    <div className="navbar__footer_text">Customer Service</div>
-                    <div className="navbar__footer_text">Prime</div>
-                    <div className="navbar__footer_text">Customer Service</div>
-                    <div className="navbar__footer_text">Electronics</div>
-                    <div className="navbar__footer_text">Fashion</div>
-                    <div className="navbar__footer_text">New Releases</div>
-                    <div className="navbar__footer_text">Home & Kitchen</div>
-                    <div className="navbar__footer_text">Amazon Pay</div>
-                    <div className="navbar__footer_text">Computers</div>
-                    <div className="navbar__footer_text">Gift Ideas</div>
+                   <div className="navbar__footer_text border-white">Fresh
+                   <ArrowDropDownIcon style={{ fontSize: '20px', color: 'grey'}} />     
+
+                   </div>
+                    <div className="navbar__footer_text border-white">Amazon miniTV</div>
+                    <div className="navbar__footer_text border-white">Sell</div>
+                    <div className="navbar__footer_text border-white">Best Seller</div>
+                    <div className="navbar__footer_text border-white">Today's Deals</div>
+                    <div className="navbar__footer_text border-white">Mobiles</div>
+                    <div className="navbar__footer_text border-white">Customer Service</div>
+                    <div className="navbar__footer_text border-white">Prime</div>
+                    <div className="navbar__footer_text border-white">Customer Service</div>
+                    <div className="navbar__footer_text border-white">Electronics</div>
+                    <div className="navbar__footer_text border-white">Fashion</div>
+                    <div className="navbar__footer_text border-white">New Releases</div>
+                    <div className="navbar__footer_text border-white">Home & Kitchen</div>
+                    <div className="navbar__footer_text border-white">Amazon Pay</div>
+                    <div className="navbar__footer_text border-white">Computers</div>
+                    <div className="navbar__footer_text border-white">Gift Ideas</div>
                 </div>
 
     </div>    

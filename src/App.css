@@ -1,0 +1,22 @@
+.App {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .main-content {
+    display: flex;
+    margin-top: 50px;
+  }
+  
+  .sidebar {
+    flex: 0 0 250px; /* Sidebar width */
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f8f8;
+  }
+  
+/* .ProductGrid{
+}   */
