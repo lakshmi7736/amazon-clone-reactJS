@@ -22,101 +22,92 @@ import {
   ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 
-
-const SubCategories = () => {
+const NestedSubCategories = () => {
+  const [nestedSubCategories, setNestedSubCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [newSubCategory, setNewSubCategory] = useState(''); // Ensure it's always an empty string initially
-  const [selectedCategory, setSelectedCategory] = useState(''); // Ensure it's always an empty string initially
+  const [newNestedSubCategory, setNewNestedSubCategory] = useState('');
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
   const [page, setPage] = useState(0);
-  const [categoryPage, setCategoryPage] = useState(0); // For category pagination
-  const [editingSubCategory, setEditingSubCategory] = useState(null);
+  const [subCategoryPage, setSubCategoryPage] = useState(0);
+  const [editingNestedSubCategory, setEditingNestedSubCategory] = useState(null);
   const [editingName, setEditingName] = useState('');
-  const [editingCategory, setEditingCategory] = useState('');
-  const dropdownRef = useRef(null); // Ref for dropdown
+  const [editingSubCategory, setEditingSubCategory] = useState('');
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
-    fetchSubCategories();
+    fetchNestedSubCategories();
   }, [page]);
 
   useEffect(() => {
-    fetchCategories();
-  }, [categoryPage]);
+    fetchSubCategories();
+  }, [subCategoryPage]);
 
-  // Fetch subcategories
+  const handleCategoryPageChange = (direction) => {
+    if (direction === 'next') {
+      setSubCategoryPage((prevPage) => prevPage + 1);
+    } else {
+      setSubCategoryPage((prevPage) => Math.max(prevPage - 1, 0));
+    }
+  };
+
+  const fetchNestedSubCategories = async () => {
+    try {
+      const response = await api.get(`/api/nestedSubCategories/all-nested-sub-categories?page=${page}`);
+      setNestedSubCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching nested subcategories:', error);
+    }
+  };
+
   const fetchSubCategories = async () => {
     try {
-      const response = await api.get(`/api/subCategories/all-sub-categories?page=${page}`);
+      const response = await api.get(`/api/subCategories/all-sub-categories?page=${subCategoryPage}`);
       setSubCategories(response.data);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
   };
 
-  // Fetch categories for the dropdown with pagination
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get(`/api/categories/all-categories?page=${categoryPage}`);
-      setCategories(response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
-  // Handle pagination for the dropdown
-  const handleCategoryPageChange = (direction) => {
-    if (direction === 'next') {
-      setCategoryPage((prevPage) => prevPage + 1);
-    } else {
-      setCategoryPage((prevPage) => Math.max(prevPage - 1, 0));
-    }
-  };
-
-  // Create subcategory
   const handleCreate = async () => {
     try {
-      await api.post(`/api/subCategories`, {
-        subCategoryName: newSubCategory,
-        categoryId: { id: selectedCategory }
+      await api.post(`/api/nestedSubCategories`, {
+        nestedSubCategoryName: newNestedSubCategory,
+        subCategoryId: { id: selectedSubCategory }
       });
-      setNewSubCategory(''); // Reset to empty string to maintain controlled state
-      setSelectedCategory(''); // Reset to empty string to maintain controlled state
-      fetchSubCategories();
+      setNewNestedSubCategory('');
+      fetchNestedSubCategories();
     } catch (error) {
-      console.error('Error creating subcategory:', error);
+      console.error('Error creating nested subcategory:', error);
     }
   };
 
-  // Update subcategory
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/subCategories/${id}`, {
-        subCategoryName: editingName,
-        categoryId: { id: editingCategory }
+      await api.put(`/api/nestedSubCategories/${id}`, {
+        nestedSubCategoryName: editingName,
+        subCategoryId: { id: editingSubCategory }
       });
-      setEditingSubCategory(null);
+      setEditingNestedSubCategory(null);
       setEditingName('');
-      setEditingCategory('');
-      fetchSubCategories();
+      fetchNestedSubCategories();
     } catch (error) {
-      console.error('Error updating subcategory:', error);
+      console.error('Error updating nested subcategory:', error);
     }
   };
 
-  // Delete subcategory
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/api/subCategories/${id}`);
-      fetchSubCategories();
+      await api.delete(`/api/nestedSubCategories/${id}`);
+      fetchNestedSubCategories();
     } catch (error) {
-      console.error('Error deleting subcategory:', error);
+      console.error('Error deleting nested subcategory:', error);
     }
   };
 
   return (
     <Container maxWidth="md" style={{ marginTop: '20px' }}>
       <Typography variant="h4" gutterBottom align="center">
-        Subcategories Dashboard
+        Nested Subcategories Dashboard
       </Typography>
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -124,39 +115,39 @@ const SubCategories = () => {
             <TextField
               fullWidth
               variant="outlined"
-              value={newSubCategory}
-              onChange={(e) => setNewSubCategory(e.target.value)}
-              placeholder="Add new subcategory"
+              value={newNestedSubCategory}
+              onChange={(e) => setNewNestedSubCategory(e.target.value)}
+              placeholder="Add new nested subcategory"
             />
           </Grid>
           <Grid item xs={4}>
             <FormControl fullWidth>
-              <InputLabel>Category</InputLabel>
+              <InputLabel>Subcategory</InputLabel>
               <Select
-                value={selectedCategory || ''} // Ensure controlled input
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedSubCategory}
+                onChange={(e) => setSelectedSubCategory(e.target.value)}
                 inputRef={dropdownRef}
                 onClose={() => dropdownRef.current.focus()}
               >
-                {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
-                    {category.name}
+                {subCategories.map((subCategory) => (
+                  <MenuItem key={subCategory.id} value={subCategory.id}>
+                    {subCategory.subCategoryName}
                   </MenuItem>
                 ))}
-                  <MenuItem>
-                          <IconButton onClick={() => handleCategoryPageChange('prev')} >
-                            <ArrowBackIcon />
-                          </IconButton>
-                          <IconButton onClick={() => handleCategoryPageChange('next')}>
-                            <ArrowForwardIcon />
-                          </IconButton>
-                      </MenuItem>
+                <MenuItem>
+                  <IconButton onClick={() => handleCategoryPageChange('prev')} disabled={subCategoryPage === 0}>
+                    <ArrowBackIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleCategoryPageChange('next')}>
+                    <ArrowForwardIcon />
+                  </IconButton>
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>
           <Grid item xs={3}>
             <Button variant="contained" color="primary" onClick={handleCreate} fullWidth>
-              Save Subcategory
+              Save Nested Subcategory
             </Button>
           </Grid>
         </Grid>
@@ -164,13 +155,13 @@ const SubCategories = () => {
 
       <Paper elevation={3} style={{ padding: '20px' }}>
         <Typography variant="h6" gutterBottom>
-          Existing Subcategories
+          Existing Nested Subcategories
         </Typography>
         <Grid container spacing={2}>
-          {subCategories.map((subCategory) => (
-            <Grid item xs={12} key={subCategory.id}>
+          {nestedSubCategories.map((nestedSubCategory) => (
+            <Grid item xs={12} key={nestedSubCategory.id}>
               <Paper style={{ padding: '10px' }}>
-                {editingSubCategory === subCategory.id ? (
+                {editingNestedSubCategory === nestedSubCategory.id ? (
                   <Grid container alignItems="center">
                     <Grid item xs={5}>
                       <TextField
@@ -182,20 +173,17 @@ const SubCategories = () => {
                     </Grid>
                     <Grid item xs={4}>
                       <FormControl fullWidth>
-                        <InputLabel>Category</InputLabel>
+                        <InputLabel>Subcategory</InputLabel>
                         <Select
-                          value={editingCategory || ''} // Ensure controlled input
-                          onChange={(e) => setEditingCategory(e.target.value)}
-                          inputRef={dropdownRef}
-                          onClose={() => dropdownRef.current.focus()}
+                          value={editingSubCategory}
+                          onChange={(e) => setEditingSubCategory(e.target.value)}
                         >
-                          {categories.map((category) => (
-                            <MenuItem key={category.id} value={category.id}>
-                              {category.name}
+                          {subCategories.map((subCategory) => (
+                            <MenuItem key={subCategory.id} value={subCategory.id}>
+                              {subCategory.subCategoryName}
                             </MenuItem>
-                            
                           ))}
-                          <MenuItem>
+                            <MenuItem>
                           <IconButton onClick={() => handleCategoryPageChange('prev')} >
                             <ArrowBackIcon />
                           </IconButton>
@@ -207,14 +195,13 @@ const SubCategories = () => {
                       </FormControl>
                     </Grid>
                     <Grid item>
-                      <IconButton onClick={() => handleUpdate(subCategory.id)} color="primary">
+                      <IconButton onClick={() => handleUpdate(nestedSubCategory.id)} color="primary">
                         <SaveIcon />
                       </IconButton>
                       <IconButton
                         onClick={() => {
-                          setEditingSubCategory(null);
+                          setEditingNestedSubCategory(null);
                           setEditingName('');
-                          setEditingCategory('');
                         }}
                         color="secondary"
                       >
@@ -226,21 +213,21 @@ const SubCategories = () => {
                   <Grid container alignItems="center" justifyContent="space-between">
                     <Grid item>
                       <Typography variant="body1">
-                        {subCategory.subCategoryName} - {subCategory.categoryId.name}
+                        {nestedSubCategory.nestedSubCategoryName} - {nestedSubCategory.subCategoryId.subCategoryName}
                       </Typography>
                     </Grid>
                     <Grid item>
                       <IconButton
                         onClick={() => {
-                          setEditingSubCategory(subCategory.id);
-                          setEditingName(subCategory.subCategoryName);
-                          setEditingCategory(subCategory.categoryId.id);
+                          setEditingNestedSubCategory(nestedSubCategory.id);
+                          setEditingName(nestedSubCategory.nestedSubCategoryName);
+                          setEditingSubCategory(nestedSubCategory.subCategoryId.id);
                         }}
                         color="primary"
                       >
                         <EditIcon />
                       </IconButton>
-                      <IconButton onClick={() => handleDelete(subCategory.id)} color="secondary">
+                      <IconButton onClick={() => handleDelete(nestedSubCategory.id)} color="secondary">
                         <DeleteIcon />
                       </IconButton>
                     </Grid>
@@ -269,4 +256,4 @@ const SubCategories = () => {
   );
 };
 
-export default SubCategories;
+export default NestedSubCategories;
