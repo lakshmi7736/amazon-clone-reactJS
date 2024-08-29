@@ -26,8 +26,7 @@ function App() {
             </div>
           }
         />
-         <Route path="/products" element={<Products />} />
-
+<Route path="/products/:seller" element={<Products />} />
         <Route
           path="/"
           element={

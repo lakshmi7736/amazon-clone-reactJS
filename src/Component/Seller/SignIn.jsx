@@ -108,9 +108,9 @@ const SignIn = () => {
         e.preventDefault();
         try {
             const response = await api.post('/api/sellers/signin', formData);
+            const seller = response.data.seller.id;
             alert('Signed in successfully!');
-            navigate('/products');
-            console.log(response.data);
+            navigate(`/products/${seller}`);
         } catch (err) {
             setError(err.response ? err.response.data : 'An error occurred');
         }

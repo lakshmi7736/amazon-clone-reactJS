@@ -1,22 +1,3 @@
-// import React from "react";
-// import ProductCard from "./ProductCard";
-// import "./ProductGrid.css";
-
-// const ProductGrid = ({ products}) => {
-
-  
-//   return (<>
-//    <div className="product-grid">
-//       {products.map((product, index) => (
-//         <ProductCard key={index} product={product} />
-//       ))}
-//     </div>
-//   </>
-   
-//   );
-// };
-
-// export default ProductGrid;
 import React, { useState } from 'react';
 import './ProductGrid.css';
 
@@ -24,10 +5,13 @@ const ProductGrid = ({ products }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
+  // Ensure products is always treated as an array
+  const safeProducts = Array.isArray(products) ? products : [];
+
   // Logic for displaying products
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = safeProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Logic for pagination
   const pageNumbers = [];
@@ -44,9 +28,10 @@ const ProductGrid = ({ products }) => {
       <div className="product-grid">
         {currentProducts.map(product => (
           <div key={product.id} className="product-item">
-            <img src={product.image} alt={product.name} />
+            {/* <img src={product.imageBlob} alt={product.name} /> */}
             <h3>{product.name}</h3>
             <p>{product.price}</p>
+            <p>{product.averageRating}</p>
           </div>
         ))}
       </div>

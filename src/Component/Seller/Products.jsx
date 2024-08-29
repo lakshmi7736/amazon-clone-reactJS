@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Typography, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, IconButton, Button, Checkbox, FormControlLabel, Input } from '@mui/material';
 import { ArrowBack as ArrowBackIcon, ArrowForward as ArrowForwardIcon, Save as SaveIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { api } from '../../API/Api';
+import { useParams } from 'react-router-dom';
 
 const Products = () => {
+  const { seller } = useParams(); 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -16,6 +18,7 @@ const Products = () => {
     brand: '',
     prime: false,
     cod: false,
+    seller:seller,
     madeForAmazon: false,
     categoryId: '',
     subCategoryId: '',
@@ -65,7 +68,6 @@ const Products = () => {
     try {
       const response = await api.get(`/api/subcategory-requests/all-sub-categories?page=${subCategoryPage}`);
       setSubCategories(response.data);
-      console.log("sub categories",response.data)
     } catch (error) {
       console.error('Error fetching subcategories:', error);
     }
@@ -108,38 +110,64 @@ const Products = () => {
     }
   };
 
+
   const handleCreate = async () => {
     const formData = new FormData();
     Object.keys(newProduct).forEach((key) => {
       if (key === 'imageBlob' && newProduct[key]) {
-        formData.append('files', newProduct[key]);
+        // Append each file to the form data
+        Array.from(newProduct[key]).forEach(file => {
+          formData.append('files', file);
+        });
       } else {
         formData.append(key, newProduct[key]);
       }
     });
-
+  
     try {
       await api.post('/api/products/add', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setNewProduct({
-        name: '',
-        description: '',
-        price: '',
-        brand: '',
-        prime: false,
-        cod: false,
-        madeForAmazon: false,
-        categoryId: '',
-        subCategoryId: '',
-        nestedSubCategoryId: '',
-        imageBlob: null
-      });
+      // Reset your form and product state as needed here
       fetchProducts();
     } catch (error) {
       console.error('Error creating product:', error);
     }
   };
+
+  // const handleCreate = async () => {
+  //   const formData = new FormData();
+  //   Object.keys(newProduct).forEach((key) => {
+  //     if (key === 'imageBlob' && newProduct[key]) {
+  //       formData.append('files', newProduct[key]);
+  //     } else {
+  //       formData.append(key, newProduct[key]);
+  //     }
+  //   });
+
+  //   try {
+  //     await api.post('/api/products/add', formData, {
+  //       headers: { 'Content-Type': 'multipart/form-data' }
+  //     });
+  //     setNewProduct({
+  //       name: '',
+  //       description: '',
+  //       price: '',
+  //       brand: '',
+  //       prime: false,
+  //       seller: seller,
+  //       cod: false,
+  //       madeForAmazon: false,
+  //       categoryId: '',
+  //       subCategoryId: '',
+  //       nestedSubCategoryId: '',
+  //       imageBlob: null
+  //     });
+  //     fetchProducts();
+  //   } catch (error) {
+  //     console.error('Error creating product:', error);
+  //   }
+  // };
 
   const handleUpdate = async (id) => {
     const formData = new FormData();
@@ -326,17 +354,19 @@ const Products = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Input
-              type="file"
-              inputRef={imageInputRef}
-              onChange={(e) => setNewProduct({ ...newProduct, imageBlob: e.target.files[0] })}
-            />
+          <Input
+            type="file"
+            inputRef={imageInputRef}
+            onChange={(e) => setNewProduct({ ...newProduct, imageBlob: e.target.files })}
+            multiple
+          />
           </Grid>
           <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
             <Button variant="contained" color="primary" onClick={handleCreate}>
               <SaveIcon /> Create Product
             </Button>
           </Grid>
+          {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
         </Grid>
       </Paper>
       <Typography variant="h5" gutterBottom>
@@ -354,7 +384,7 @@ const Products = () => {
                 <Typography variant="body2">Prime: {product.prime ? 'Yes' : 'No'}</Typography>
                 <Typography variant="body2">COD Available: {product.cod ? 'Yes' : 'No'}</Typography>
                 <Typography variant="body2">Made for Amazon: {product.madeForAmazon ? 'Yes' : 'No'}</Typography>
-                {product.image && <img src={`http://localhost:9090/${product.image}`} alt={product.name} style={{ width: '100px' }} />}
+                {/* {product.image && <img src={`http://localhost:9090/${product.image}`} alt={product.name} style={{ width: '100px' }} />} */}
                 <IconButton onClick={() => setEditingProduct(product)}><EditIcon /></IconButton>
                 <IconButton onClick={() => handleDelete(product.id)}><DeleteIcon /></IconButton>
               </Paper>

@@ -1,180 +1,30 @@
+import React, { useEffect, useState } from 'react';
 import ProductGrid from "../ProductGrid";
 import './products.css';
+import { api } from '../../API/Api';
 
- const products = [
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "SIRIL",
-      name: "Women's Dola Silk Floral Printed Saree With Unstitched Blouse",
-      rating: 4.5,
-      price: 649,
-      originalPrice: 2688,
-      discount: "76%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },  {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
+const ProductPage = () => {
+  const [products, setProducts] = useState([]);
 
-    {
-      image: "https://m.media-amazon.com/images/I/51zTLfvpVLL.jpg",
-      brand: "Sidhidata",
-      name: "Women's Kanjivaram Banarasi Paithani Jacquard Silk Saree With Blouse Piece",
-      rating: 4.2,
-      price: 449,
-      originalPrice: 1999,
-      discount: "78%",
-    },
+  useEffect(() => {
+    // Fetch data from the backend
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get('/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+    };
 
-    // Add more products as needed
-  ];
+    fetchProducts();
+  }, []);
 
-  const ProductPage = () => {
-    return (
-      <div className="product-page">
-        <ProductGrid products={products} />
-      </div>
-    );
-  }
-  export default ProductPage;
-  
-  
+  return (
+    <div className="product-page">
+      <ProductGrid products={products} />
+    </div>
+  );
+};
+
+export default ProductPage;
