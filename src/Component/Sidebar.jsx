@@ -132,7 +132,6 @@ const Sidebar = () => {
   const fetchSellers = async () => {
     try {
       const response = await api.get(`/api/sellers/all-sellers`);
-      console.log("sellers: ",response.data);
       setSellers(response.data);
     } catch (error) {
       console.error(`Error fetching sellers:`, error);
@@ -141,7 +140,7 @@ const Sidebar = () => {
 
       // Handler function to update filters
 
-      const handleFilter = async ({ categoryId, subcategoryId, nestedId ,madeForAmazon ,prime ,cod ,brand, seller}) => {
+      const handleFilter = async ({ categoryId, subcategoryId, nestedId ,madeForAmazon ,prime ,cod ,brand, seller,avgReview ,minPrice, maxPrice}) => {
         const filters = {};
     
         if (categoryId !== undefined && categoryId !== null) {
@@ -173,6 +172,15 @@ const Sidebar = () => {
 
         if(seller !== undefined && seller !== null){
           filters.seller=seller;
+        }
+        if(avgReview !== undefined && avgReview !== null){
+          filters.averageRating=avgReview;
+        }
+        if(minPrice !== undefined && minPrice !== null){
+          filters.minPrice=minPrice;
+        }
+        if(maxPrice !== undefined && maxPrice !== null){
+          filters.maxPrice=maxPrice;
         }
         await fetchProducts(filters);
     };
@@ -305,27 +313,27 @@ const Sidebar = () => {
 
              <div className="filter-section">
                  <h5>Avg. Customer Review</h5>
-                 <div className="rating">
+                 <div className="rating" onClick={()=>handleFilter({avgReview:4})}>
                      <span>★★★★☆</span> & Up
                  </div>
-               <div className="rating">
+               <div className="rating" onClick={()=>handleFilter({avgReview:3})}>
                     <span>★★★☆☆</span> & Up
                  </div>
-                 <div className="rating">
+                 <div className="rating" onClick={()=>handleFilter({avgReview:2})}>
                      <span>★★☆☆☆</span> & Up
                  </div>
-                <div className="rating">
+                <div className="rating" onClick={()=>handleFilter({avgReview:1})}>
                   <span>★☆☆☆☆</span> & Up
                  </div>
             </div>
              <div className="filter-section">
                  <h5>Price</h5>
                 <ul>
-                     <li>Under ₹1,000</li>
-                     <li>₹1,000 - ₹5,000</li>
-                    <li>₹5,000 - ₹10,000</li>
-                    <li>₹10,000 - ₹20,000</li>
-                     <li>Over ₹20,000</li>
+                     <li onClick={()=>handleFilter({minPrice:0,maxPrice:1000})}>Under ₹1,000</li>
+                     <li onClick={()=>handleFilter({minPrice:1000,maxPrice:5000})}>₹1,000 - ₹5,000</li>
+                    <li onClick={()=>handleFilter({minPrice:5000,maxPrice:10000})}>₹5,000 - ₹10,000</li>
+                    <li onClick={()=>handleFilter({minPrice:10000,maxPrice:20000})}>₹10,000 - ₹20,000</li>
+                     <li onClick={()=>handleFilter({minPrice:20000})}>Over ₹20,000</li>
                 </ul>
              </div>
 
