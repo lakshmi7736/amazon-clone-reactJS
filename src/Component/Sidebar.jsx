@@ -1,223 +1,203 @@
-// import React from 'react';
-// import './Sidebar.css';
-
-// const Sidebar = () => {
-//     return (
-//         <div className="sidebar">
-//             <h5>Category</h5>
-//             <ul>
-//                 <li><a href="#electronics">Electronics</a></li>
-//                 <li className="sub-category">
-//                     <h5 href="#mobiles-accessories">Mobiles & Accessories</h5>
-//                     <ul>
-//                         <li><a href="#mobile-accessories">Mobile Accessories</a></li>
-//                         <li><a href="#mobile-broadband-devices">Mobile Broadband Devices</a></li>
-//                         <li><a href="#sim-cards">SIM Cards</a></li>
-//                         <li><a href="#smartphones-basic-mobiles">Smartphones & Basic Mobiles</a></li>
-//                         <li><a href="#smartwatches">Smartwatches</a></li>
-//                     </ul>
-//                 </li>
-//             </ul>
-            
-//             <div className="filter-section">
-//                 <h5>Made for Amazon Brands</h5>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Made for Amazon
-//                 </label>
-//             </div>
-
-//             <div className="filter-section">
-//                 <h5>Amazon Prime</h5>
-//                 <label>
-//                     <input type="checkbox" />
-//                     <span className="prime">prime</span>
-//                 </label>
-//             </div>
-//             <div className="filter-section">
-//                 <h5>Pay On Delivery</h5>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Eligible for Pay On Delivery
-//                 </label>
-//             </div>
-
-//             <div className="filter-section">
-//                 <h5>Brand</h5>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Redmi
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Ambrane
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Nokia
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     iQOO
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Samsung
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Apple
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     SanDisk
-//                 </label>
-//             </div>
-
-
-//             <div className="filter-section">
-//                 <h5>Avg. Customer Review</h5>
-//                 <div className="rating">
-//                     <span>★★★★☆</span> & Up
-//                 </div>
-//                 <div className="rating">
-//                     <span>★★★☆☆</span> & Up
-//                 </div>
-//                 <div className="rating">
-//                     <span>★★☆☆☆</span> & Up
-//                 </div>
-//                 <div className="rating">
-//                     <span>★☆☆☆☆</span> & Up
-//                 </div>
-//             </div>
-//             <div className="filter-section">
-//                 <h5>Price</h5>
-//                 <ul>
-//                     <li>Under ₹1,000</li>
-//                     <li>₹1,000 - ₹5,000</li>
-//                     <li>₹5,000 - ₹10,000</li>
-//                     <li>₹10,000 - ₹20,000</li>
-//                     <li>Over ₹20,000</li>
-//                 </ul>
-//             </div>
-
-//             <div className="filter-section">
-//                 <h5>Seller</h5>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Redmi
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Ambrane
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Nokia
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     iQOO
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Samsung
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     Apple
-//                 </label>
-//                 <label>
-//                     <input type="checkbox" />
-//                     SanDisk
-//                 </label>
-//             </div>
-
-//         </div>
-//     );
-// };
-
-// export default Sidebar;
-// <span class="a-size-base a-color-base" dir="auto">₹5,000 - ₹10,000</span>
-
 import React, { useState, useEffect } from 'react';
+import { List, ListItemButton, ListItemText, Collapse } from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { api } from '../API/Api';
+import './Sidebar.css';
 
 const Sidebar = () => {
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [subCategories, setSubCategories] = useState([]);
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
-  const [nestedSubCategories, setNestedSubCategories] = useState([]);
+  const [openCategories, setOpenCategories] = useState({});
+  const [subcategories, setSubcategories] = useState({});
+  const [nestedSubcategories, setNestedSubcategories] = useState({});
+  const [brands, setBrands]=useState([]);
+  const [sellers, setSellers]= useState([]);
 
-  // Fetch all categories
   useEffect(() => {
-    api.get('/api/category-requests/all-categories')
-      .then(response => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/api/category-requests/all-categories');
         setCategories(response.data);
-      })
-      .catch(error => console.error("Failed to fetch categories", error));
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+    fetchBrands();
+    fetchSellers();
   }, []);
 
-  // Fetch subcategories when a category is selected
-  useEffect(() => {
-    if (selectedCategory) {
-      api.get(`/api/subcategory-requests/${selectedCategory}`)
-        .then(response => {
-          setSubCategories(response.data);
-        })
-        .catch(error => console.error("Failed to fetch subcategories", error));
-    } else {
-      setSubCategories([]);
-    }
-  }, [selectedCategory]);
+  const toggleCategory = (categoryId) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [categoryId]: !prev[categoryId],
+    }));
 
-  // Fetch nested subcategories when a subcategory is selected
-  useEffect(() => {
-    if (selectedSubCategory) {
-      api.get(`/api/nested-subcategory-requests/${selectedSubCategory}`)
-        .then(response => {
-          setNestedSubCategories(response.data);
-        })
-        .catch(error => console.error("Failed to fetch nested subcategories", error));
-    } else {
-      setNestedSubCategories([]);
+    if (!subcategories[categoryId]) {
+      fetchSubcategories(categoryId);
     }
-  }, [selectedSubCategory]);
-
-  const handleCategoryClick = (categoryId) => {
-    setSelectedCategory(categoryId);
-    // Reset subcategory selection when a new category is clicked
-    setSelectedSubCategory(null);
   };
+
+  const fetchSubcategories = async (categoryId) => {
+    try {
+      const response = await api.get(`/api/subcategory-requests/${categoryId}`);
+      setSubcategories((prev) => ({
+        ...prev,
+        [categoryId]: response.data,
+      }));
+    } catch (error) {
+      console.error(`Error fetching subcategories for category ${categoryId}:`, error);
+    }
+  };
+
+  const toggleSubcategory = (categoryId, subcategoryId) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [subcategoryId]: !prev[subcategoryId],
+    }));
+
+    if (!nestedSubcategories[subcategoryId]) {
+      fetchNestedSubcategories(subcategoryId);
+    }
+  };
+
+  const fetchNestedSubcategories = async (subcategoryId) => {
+    try {
+      const response = await api.get(`/api/nested-subcategory-requests/${subcategoryId}`);
+      setNestedSubcategories((prev) => ({
+        ...prev,
+        [subcategoryId]: response.data,
+      }));
+    } catch (error) {
+      console.error(`Error fetching nested subcategories for subcategory ${subcategoryId}:`, error);
+    }
+  };
+
+  const fetchBrands = async () => {
+    try {
+      const response = await api.get(`/api/products/all-brands`);
+      setBrands(response.data);
+    } catch (error) {
+      console.error(`Error fetching brands:`, error);
+    }
+  };
+
+  const fetchSellers = async () => {
+    try {
+      const response = await api.get(`/api/products/all-sellers`);
+      setSellers(response.data);
+    } catch (error) {
+      console.error(`Error fetching sellers:`, error);
+    }
+  };
+  
 
   return (
     <div className="sidebar">
-      <ul>
-        {categories.map(category => (
-          <li key={category.id} onClick={() => handleCategoryClick(category.id)}>
-            {category.name}
-          </li>
+        <h5>Category</h5>
+      <List component="nav" aria-labelledby="nested-list-subheader">
+        {categories.map((category) => (
+          <div key={category.id}>
+            <ListItemButton onClick={() => toggleCategory(category.id)}>
+              <ListItemText primary={category.name} />
+              {openCategories[category.id] ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={openCategories[category.id]} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {(subcategories[category.id] || []).map((subcategory) => (
+                  <div key={subcategory.id}>
+                    <ListItemButton sx={{ pl: 4 }} onClick={() => toggleSubcategory(category.id, subcategory.id)}>
+                      <ListItemText primary={subcategory.subCategoryName} />
+                      {openCategories[subcategory.id] ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openCategories[subcategory.id]} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {(nestedSubcategories[subcategory.id] || []).map((nested) => (
+                          <ListItemButton key={nested.id} sx={{ pl: 8 }}>
+                            <ListItemText primary={nested.nestedSubCategoryName} />
+                          </ListItemButton>
+                        ))}
+                      </List>
+                    </Collapse>
+                  </div>
+                ))}
+              </List>
+            </Collapse>
+          </div>
         ))}
-      </ul>
-      {selectedCategory && subCategories.length > 0 && (
-        <ul>
-          {subCategories.map(subCategory => (
-            <li key={subCategory.id} onClick={() => setSelectedSubCategory(subCategory.id)}>
-              {subCategory.name}
-            </li>
-          ))}
-        </ul>
-      )}
-      {selectedSubCategory && nestedSubCategories.length > 0 && (
-        <ul>
-          {nestedSubCategories.map(nestedSubCategory => (
-            <li key={nestedSubCategory.id}>
-              {nestedSubCategory.name}
-            </li>
-          ))}
-        </ul>
-      )}
+      </List>
+
+      {/* Filters */}
+      <div className="filter-section">
+        <h5>Made for Amazon Brands</h5>
+        <label>
+          <input type="checkbox" />
+          Made for Amazon
+        </label>
+      </div>
+
+      <div className="filter-section">
+        <h5>Amazon Prime</h5>
+        <label>
+          <input type="checkbox" />
+          <span className="prime">prime</span>
+        </label>
+      </div>
+
+      <div className="filter-section">
+                 <h5>Pay On Delivery</h5>
+                 <label>
+                     <input type="checkbox" />
+                     Eligible for Pay On Delivery
+                </label>
+             </div>
+
+             <div className="filter-section">
+                 <h5>Brand</h5>
+                 {brands.map((brand, index) => (
+                  <label key={index}>
+                    <input type="checkbox" />
+                    {brand}
+                  </label>
+                ))}
+             </div>
+
+
+             <div className="filter-section">
+                 <h5>Avg. Customer Review</h5>
+                 <div className="rating">
+                     <span>★★★★☆</span> & Up
+                 </div>
+               <div className="rating">
+                    <span>★★★☆☆</span> & Up
+                 </div>
+                 <div className="rating">
+                     <span>★★☆☆☆</span> & Up
+                 </div>
+                <div className="rating">
+                  <span>★☆☆☆☆</span> & Up
+                 </div>
+            </div>
+             <div className="filter-section">
+                 <h5>Price</h5>
+                <ul>
+                     <li>Under ₹1,000</li>
+                     <li>₹1,000 - ₹5,000</li>
+                    <li>₹5,000 - ₹10,000</li>
+                    <li>₹10,000 - ₹20,000</li>
+                     <li>Over ₹20,000</li>
+                </ul>
+             </div>
+
+             <div className="filter-section">
+                 <h5>Seller</h5>
+                 {sellers.map((seller, index) => (
+                  <label key={index}>
+                    <input type="checkbox" />
+                    {seller}
+                  </label>
+                ))}
+             </div>
     </div>
   );
 };

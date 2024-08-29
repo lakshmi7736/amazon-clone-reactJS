@@ -1,43 +1,90 @@
-.sidebar {
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 13px;
-  }
-  
-  .sidebar h5{
-    margin-bottom: 10px;
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .sidebar li {
-    margin-bottom: 8px;
-  }
-  
-  .sub-category ul {
-    padding-left: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input[type="checkbox"] {
-    margin-right: 8px;
-  }
-  
-  .rating span {
-    color: #ffa41c;
-  }
-  
-  .prime {
-    color: #00a8e1;
-    font-weight: bold;
-  }
-   
+    .sidebar {
+      padding: 15px;
+      background-color: #f4f4f4;
+      border-right: 1px solid #ddd;
+      height: 100vh;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+    
+    .sidebar h5 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      margin-bottom: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 5px 0;
+    }
+    
+    .sub-category ul {
+      padding-left: 20px;
+    }
+    
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    input[type="checkbox"] {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+    
+    .rating span {
+      color: #ffa41c;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .prime {
+      color: #00a8e1;
+      font-weight: bold;
+    }
+    
+    .filter-section {
+      margin-top: 20px;
+    }
+    
+    .filter-section h5 {
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    
+    .filter-section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    .filter-section li {
+      margin-bottom: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .filter-section label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .filter-section .rating {
+      margin-bottom: 5px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    

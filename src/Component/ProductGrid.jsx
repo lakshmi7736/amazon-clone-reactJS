@@ -3,7 +3,7 @@ import './ProductGrid.css';
 
 const ProductGrid = ({ products }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8;
+  const productsPerPage = 10;
 
   // Ensure products is always treated as an array
   const safeProducts = Array.isArray(products) ? products : [];
@@ -28,7 +28,7 @@ const ProductGrid = ({ products }) => {
       <div className="product-grid">
       {currentProducts.map(product => (
         <div key={product.id} className="product-item">
-          <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} /> {/* Adjusted this line */}
+          <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} />
           <h3>{product.name}</h3>
           <p>{product.price}</p>
           <p>{product.averageRating}</p>
