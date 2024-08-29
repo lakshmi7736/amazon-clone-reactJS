@@ -15,7 +15,7 @@ const ProductGrid = ({ products }) => {
 
   // Logic for pagination
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(safeProducts.length / productsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -25,30 +25,37 @@ const ProductGrid = ({ products }) => {
 
   return (
     <div>
-      <div className="product-grid">
-      {currentProducts.map(product => (
-        <div key={product.id} className="product-item">
-          <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>{product.price}</p>
-          <p>{product.averageRating}</p>
+      {safeProducts.length === 0 ? (
+        <p className="no-products-message">No products available</p>
+      ) : (
+        <div>
+          <div className="product-grid">
+            {currentProducts.map(product => (
+              <div key={product.id} className="product-item">
+                <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} />
+                <h3>{product.name}</h3>
+                <p>{product.price}</p>
+                <p>{product.averageRating}</p>
+              </div>
+            ))}
+          </div>
+          {/* Pagination */}
+          <div className="pagination">
+            {pageNumbers.map(number => (
+              <button
+                key={number}
+                onClick={() => handlePageClick(number)}
+                className={number === currentPage ? 'active' : ''}
+              >
+                {number}
+              </button>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-      {/* Pagination */}
-      <div className="pagination">
-        {pageNumbers.map(number => (
-          <button
-            key={number}
-            onClick={() => handlePageClick(number)}
-            className={number === currentPage ? 'active' : ''}
-          >
-            {number}
-          </button>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
 
 export default ProductGrid;
+

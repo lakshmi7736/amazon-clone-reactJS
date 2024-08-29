@@ -57,3 +57,10 @@
         background-color: #ddd;
     }
   }
+
+  .no-products-message {
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0; /* Optional: Add some margin for spacing */
+  }
+  

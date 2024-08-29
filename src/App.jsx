@@ -1,11 +1,9 @@
 import './App.css';
 import Header from './Component/Header';
-import ProductPage from './Component/data/products';
 import {  Route, Routes } from 'react-router-dom';
 import Sidebar from './Component/Sidebar';
 import SignUp from './Component/Seller/SignUp';
 import SignIn from './Component/Seller/SignIn';
-import Products from './Component/Seller/Products';
 
 function App() {
   return (
@@ -35,7 +33,6 @@ function App() {
               <Header />
               <div className="main-content">
                 <Sidebar />
-                <ProductPage />
               </div>
             </div>
           }

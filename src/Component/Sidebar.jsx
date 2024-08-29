@@ -3,6 +3,7 @@ import { List, ListItemButton, ListItemText, Collapse } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { api } from '../API/Api';
 import './Sidebar.css';
+import ProductGrid from './ProductGrid';
 
 const Sidebar = () => {
   const [categories, setCategories] = useState([]);
@@ -11,32 +12,57 @@ const Sidebar = () => {
   const [nestedSubcategories, setNestedSubcategories] = useState({});
   const [brands, setBrands]=useState([]);
   const [sellers, setSellers]= useState([]);
+  const [products, setProducts] = useState([]);
+  const [madeForAmazon, setMadeForAmazon] = useState(false);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await api.get('/api/category-requests/all-categories');
-        setCategories(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
+    
     fetchCategories();
+    fetchProducts();
     fetchBrands();
     fetchSellers();
   }, []);
 
-  const toggleCategory = (categoryId) => {
+
+   // Fetch data from the backend
+   const fetchProducts = async (filters) => {
+    try {
+      // Construct query parameters from filters
+      const params = new URLSearchParams(filters).toString();
+  
+      // Fetch products with query parameters
+      const response = await api.get(`/api/products?${params}`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get('/api/category-requests/all-categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+
+  };
+  const toggleCategory = async (categoryId) => {
     setOpenCategories((prev) => ({
       ...prev,
       [categoryId]: !prev[categoryId],
     }));
-
+  
     if (!subcategories[categoryId]) {
       fetchSubcategories(categoryId);
     }
+  
+    // Fetch products when the category is expanded
+    if (!openCategories[categoryId]) {
+      handleFilter({categoryId});
+    }
   };
+  
 
   const fetchSubcategories = async (categoryId) => {
     try {
@@ -50,7 +76,7 @@ const Sidebar = () => {
     }
   };
 
-  const toggleSubcategory = (categoryId, subcategoryId) => {
+  const toggleSubcategory = async (categoryId, subcategoryId) => {
     setOpenCategories((prev) => ({
       ...prev,
       [subcategoryId]: !prev[subcategoryId],
@@ -58,6 +84,12 @@ const Sidebar = () => {
 
     if (!nestedSubcategories[subcategoryId]) {
       fetchNestedSubcategories(subcategoryId);
+    }
+
+     // Fetch products when the sub-category is expanded
+     if (!openCategories[subcategoryId]) {
+      handleFilter({subcategoryId});
+
     }
   };
 
@@ -72,6 +104,38 @@ const Sidebar = () => {
       console.error(`Error fetching nested subcategories for subcategory ${subcategoryId}:`, error);
     }
   };
+
+  const handleNestedFilter = (nestedId )=>{
+    try{
+      handleFilter({nestedId});
+    } catch (error) {
+      console.error(`Error fetching nested subcategories for subcategory ${subcategoryId}:`, error);
+    }
+  };
+
+    // Handler function to update filters
+
+    const handleFilter = async ({ categoryId, subcategoryId, nestedId ,madeForAmazon }) => {
+      const filters = {};
+  
+      if (categoryId !== undefined && categoryId !== null) {
+          filters.categoryId = categoryId;
+      }
+      
+      if (subcategoryId !== undefined && subcategoryId !== null) {
+          filters.subcategoryId = subcategoryId;
+      }
+      
+      if (nestedId !== undefined && nestedId !== null) {
+          filters.nestedSubCategoryId = nestedId;
+      }
+      if(madeForAmazon !== undefined && madeForAmazon !== null){
+        filters.madeForAmazon=madeForAmazon;
+      }
+  
+      await fetchProducts(filters);
+  };
+
 
   const fetchBrands = async () => {
     try {
@@ -90,9 +154,15 @@ const Sidebar = () => {
       console.error(`Error fetching sellers:`, error);
     }
   };
-  
 
+  const handleCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setMadeForAmazon(isChecked);
+    handleFilter({ madeForAmazon: isChecked });
+  };
+  
   return (
+    <>
     <div className="sidebar">
         <h5>Category</h5>
       <List component="nav" aria-labelledby="nested-list-subheader">
@@ -113,7 +183,7 @@ const Sidebar = () => {
                     <Collapse in={openCategories[subcategory.id]} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>
                         {(nestedSubcategories[subcategory.id] || []).map((nested) => (
-                          <ListItemButton key={nested.id} sx={{ pl: 8 }}>
+                          <ListItemButton key={nested.id}  sx={{ pl: 8 }} onClick={() => handleNestedFilter(nested.id)}>
                             <ListItemText primary={nested.nestedSubCategoryName} />
                           </ListItemButton>
                         ))}
@@ -131,9 +201,13 @@ const Sidebar = () => {
       <div className="filter-section">
         <h5>Made for Amazon Brands</h5>
         <label>
-          <input type="checkbox" />
-          Made for Amazon
-        </label>
+        <input
+          type="checkbox"
+          checked={madeForAmazon}
+          onChange={handleCheckboxChange}
+        />
+        Made for Amazon
+      </label>
       </div>
 
       <div className="filter-section">
@@ -198,7 +272,11 @@ const Sidebar = () => {
                   </label>
                 ))}
              </div>
-    </div>
+         </div>
+         <div className="product-page">
+              <ProductGrid products={products} />
+            </div>
+  </>
   );
 };
 
