@@ -45,7 +45,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await api.get(`/api/products?page=${page}`);
+      const response = await api.get(`/api/products?page=${page}&seller=${seller}`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -128,46 +128,11 @@ const Products = () => {
       await api.post('/api/products/add', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      // Reset your form and product state as needed here
       fetchProducts();
     } catch (error) {
       console.error('Error creating product:', error);
     }
   };
-
-  // const handleCreate = async () => {
-  //   const formData = new FormData();
-  //   Object.keys(newProduct).forEach((key) => {
-  //     if (key === 'imageBlob' && newProduct[key]) {
-  //       formData.append('files', newProduct[key]);
-  //     } else {
-  //       formData.append(key, newProduct[key]);
-  //     }
-  //   });
-
-  //   try {
-  //     await api.post('/api/products/add', formData, {
-  //       headers: { 'Content-Type': 'multipart/form-data' }
-  //     });
-  //     setNewProduct({
-  //       name: '',
-  //       description: '',
-  //       price: '',
-  //       brand: '',
-  //       prime: false,
-  //       seller: seller,
-  //       cod: false,
-  //       madeForAmazon: false,
-  //       categoryId: '',
-  //       subCategoryId: '',
-  //       nestedSubCategoryId: '',
-  //       imageBlob: null
-  //     });
-  //     fetchProducts();
-  //   } catch (error) {
-  //     console.error('Error creating product:', error);
-  //   }
-  // };
 
   const handleUpdate = async (id) => {
     const formData = new FormData();
@@ -373,10 +338,12 @@ const Products = () => {
         Product List
       </Typography>
       {products.length > 0 ? (
-        <Grid container spacing={2}>
-          {products.map((product) => (
-            <Grid item xs={12} md={6} key={product.id}>
-              <Paper elevation={3} style={{ padding: '20px' }}>
+        <Grid container spacing={1}>
+        {products.map((product) => (
+          <Grid item xs={12} md={6} key={product.id}>
+            <Paper elevation={3} style={{ padding: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+              <div>
+              <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain', marginTop: '20px' }} />
                 <Typography variant="h6">{product.name}</Typography>
                 <Typography variant="body1">{product.description}</Typography>
                 <Typography variant="body2">Price: ${product.price}</Typography>
@@ -384,33 +351,52 @@ const Products = () => {
                 <Typography variant="body2">Prime: {product.prime ? 'Yes' : 'No'}</Typography>
                 <Typography variant="body2">COD Available: {product.cod ? 'Yes' : 'No'}</Typography>
                 <Typography variant="body2">Made for Amazon: {product.madeForAmazon ? 'Yes' : 'No'}</Typography>
-                {/* {product.image && <img src={`http://localhost:9090/${product.image}`} alt={product.name} style={{ width: '100px' }} />} */}
+              </div>
+              <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
                 <IconButton onClick={() => setEditingProduct(product)}><EditIcon /></IconButton>
                 <IconButton onClick={() => handleDelete(product.id)}><DeleteIcon /></IconButton>
-              </Paper>
-            </Grid>
-          ))}
-          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => setPage(page - 1)}
-              disabled={page === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => setPage(page + 1)}
-            >
-              Next
-            </Button>
+              </div>
+            </Paper>
           </Grid>
+        ))}
+        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 0}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
         </Grid>
+      </Grid>
       ) : (
         <Typography variant="body1" align="center">
-          No products found
+          No products you are added
+          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 0}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </Button>
+        </Grid>
         </Typography>
       )}
     </Container>

@@ -26,16 +26,15 @@ const ProductGrid = ({ products }) => {
   return (
     <div>
       <div className="product-grid">
-        {currentProducts.map(product => (
-          <div key={product.id} className="product-item">
-            {/* <img src={product.imageBlob} alt={product.name} /> */}
-            <h3>{product.name}</h3>
-            <p>{product.price}</p>
-            <p>{product.averageRating}</p>
-          </div>
-        ))}
-      </div>
-
+      {currentProducts.map(product => (
+        <div key={product.id} className="product-item">
+          <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} /> {/* Adjusted this line */}
+          <h3>{product.name}</h3>
+          <p>{product.price}</p>
+          <p>{product.averageRating}</p>
+        </div>
+      ))}
+    </div>
       {/* Pagination */}
       <div className="pagination">
         {pageNumbers.map(number => (
