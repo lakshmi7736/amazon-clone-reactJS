@@ -14,6 +14,11 @@ const Sidebar = () => {
   const [sellers, setSellers]= useState([]);
   const [products, setProducts] = useState([]);
   const [madeForAmazon, setMadeForAmazon] = useState(false);
+  const [prime, setPrime] = useState(false);
+  const [cod, setCod] = useState(false);
+  const [brandFilters, setBrandFilters] = useState({});
+  const [sellerFilters , setSellerFilters]= useState({});
+
 
   useEffect(() => {
     
@@ -113,28 +118,6 @@ const Sidebar = () => {
     }
   };
 
-    // Handler function to update filters
-
-    const handleFilter = async ({ categoryId, subcategoryId, nestedId ,madeForAmazon }) => {
-      const filters = {};
-  
-      if (categoryId !== undefined && categoryId !== null) {
-          filters.categoryId = categoryId;
-      }
-      
-      if (subcategoryId !== undefined && subcategoryId !== null) {
-          filters.subcategoryId = subcategoryId;
-      }
-      
-      if (nestedId !== undefined && nestedId !== null) {
-          filters.nestedSubCategoryId = nestedId;
-      }
-      if(madeForAmazon !== undefined && madeForAmazon !== null){
-        filters.madeForAmazon=madeForAmazon;
-      }
-  
-      await fetchProducts(filters);
-  };
 
 
   const fetchBrands = async () => {
@@ -148,18 +131,96 @@ const Sidebar = () => {
 
   const fetchSellers = async () => {
     try {
-      const response = await api.get(`/api/products/all-sellers`);
+      const response = await api.get(`/api/sellers/all-sellers`);
+      console.log("sellers: ",response.data);
       setSellers(response.data);
     } catch (error) {
       console.error(`Error fetching sellers:`, error);
     }
   };
 
-  const handleCheckboxChange = (event) => {
+      // Handler function to update filters
+
+      const handleFilter = async ({ categoryId, subcategoryId, nestedId ,madeForAmazon ,prime ,cod ,brand, seller}) => {
+        const filters = {};
+    
+        if (categoryId !== undefined && categoryId !== null) {
+            filters.categoryId = categoryId;
+        }
+        
+        if (subcategoryId !== undefined && subcategoryId !== null) {
+            filters.subcategoryId = subcategoryId;
+        }
+        
+        if (nestedId !== undefined && nestedId !== null) {
+            filters.nestedSubCategoryId = nestedId;
+        }
+        if(madeForAmazon !== undefined && madeForAmazon !== null){
+          filters.madeForAmazon=madeForAmazon;
+        }
+
+        if(prime !== undefined && prime !== null){
+          filters.prime=prime;
+        }
+    
+        if(cod !== undefined && cod !== null){
+          filters.cod=cod;
+        }
+
+        if(brand !== undefined && brand !== null){
+          filters.brand=brand;
+        }
+
+        if(seller !== undefined && seller !== null){
+          filters.seller=seller;
+        }
+        await fetchProducts(filters);
+    };
+  
+
+  const handleMadeForAmazonCheckboxChange = (event) => {
     const isChecked = event.target.checked;
     setMadeForAmazon(isChecked);
     handleFilter({ madeForAmazon: isChecked });
   };
+
+  const handlePrimeCheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setPrime(isChecked);
+    handleFilter({ prime: isChecked });
+  };
+
+  const handleCodheckboxChange = (event) => {
+    const isChecked = event.target.checked;
+    setCod(isChecked);
+    handleFilter({ cod: isChecked });
+  };
+
+  const handleBrandCheckboxChange = (event, brand) => {
+    const isChecked = event.target.checked;
+    
+    if (isChecked) {
+      setBrandFilters({ [brand]: true });
+      handleFilter({ brand: [brand] });
+    } else {
+      setBrandFilters({});
+      handleFilter({ brand: [] }); 
+    }
+  };
+
+  const handleSellerCheckboxChange = (event, seller) => {
+    const isChecked = event.target.checked;
+    
+    if (isChecked) {
+      setSellerFilters({ [seller]: true });
+      console.log("seller id :",seller);
+      handleFilter({ seller: [seller] });
+    } else {
+      setSellerFilters({});
+      handleFilter({ seller: [] }); 
+    }
+  };
+  
   
   return (
     <>
@@ -204,37 +265,42 @@ const Sidebar = () => {
         <input
           type="checkbox"
           checked={madeForAmazon}
-          onChange={handleCheckboxChange}
+          onChange={handleMadeForAmazonCheckboxChange}
         />
         Made for Amazon
       </label>
-      </div>
+        </div>
 
-      <div className="filter-section">
-        <h5>Amazon Prime</h5>
-        <label>
-          <input type="checkbox" />
-          <span className="prime">prime</span>
-        </label>
-      </div>
+        <div className="filter-section">
+          <h5>Amazon Prime</h5>
+          <label>
+            <input type="checkbox"  checked={prime}
+              onChange={handlePrimeCheckboxChange} />
+            <span className="prime">prime</span>
+          </label>
+        </div>
 
       <div className="filter-section">
                  <h5>Pay On Delivery</h5>
                  <label>
-                     <input type="checkbox" />
+                     <input type="checkbox" checked={cod} onChange={handleCodheckboxChange} />
                      Eligible for Pay On Delivery
                 </label>
              </div>
 
              <div className="filter-section">
-                 <h5>Brand</h5>
-                 {brands.map((brand, index) => (
+                <h5>Brand</h5>
+                {brands.map((brand, index) => (
                   <label key={index}>
-                    <input type="checkbox" />
+                    <input
+                      type="checkbox"
+                      checked={!!brandFilters[brand]} // Ensure the checkbox state is a boolean
+                      onChange={(event) => handleBrandCheckboxChange(event, brand)}
+                    />
                     {brand}
                   </label>
                 ))}
-             </div>
+              </div>
 
 
              <div className="filter-section">
@@ -265,10 +331,13 @@ const Sidebar = () => {
 
              <div className="filter-section">
                  <h5>Seller</h5>
-                 {sellers.map((seller, index) => (
-                  <label key={index}>
-                    <input type="checkbox" />
-                    {seller}
+                 {sellers.map((seller) => (
+                  <label key={seller.id}>
+                    <input type="checkbox"
+                    checked={!!sellerFilters[seller.id]}
+                      onChange={(event)=> handleSellerCheckboxChange(event, seller.id)}
+                     />
+                    {seller.businessName}
                   </label>
                 ))}
              </div>
