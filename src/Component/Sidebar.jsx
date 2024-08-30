@@ -94,7 +94,6 @@ const Sidebar = () => {
      // Fetch products when the sub-category is expanded
      if (!openCategories[subcategoryId]) {
       handleFilter({subcategoryId});
-
     }
   };
 
@@ -189,19 +188,32 @@ const Sidebar = () => {
   const handleMadeForAmazonCheckboxChange = (event) => {
     const isChecked = event.target.checked;
     setMadeForAmazon(isChecked);
-    handleFilter({ madeForAmazon: isChecked });
+    if(isChecked){
+      handleFilter({ madeForAmazon: isChecked });
+    }else{
+      handleFilter({ }); 
+    }
   };
 
   const handlePrimeCheckboxChange = (event) => {
     const isChecked = event.target.checked;
     setPrime(isChecked);
-    handleFilter({ prime: isChecked });
+    if(isChecked){
+      handleFilter({ prime: isChecked });
+    }else{
+      handleFilter({ }); 
+    }
   };
 
   const handleCodheckboxChange = (event) => {
     const isChecked = event.target.checked;
     setCod(isChecked);
-    handleFilter({ cod: isChecked });
+    if(isChecked){
+      handleFilter({ cod: isChecked });
+    }else{
+      handleFilter({ }); 
+    }
+  
   };
 
   const handleBrandCheckboxChange = (event, brand) => {
@@ -212,7 +224,7 @@ const Sidebar = () => {
       handleFilter({ brand: [brand] });
     } else {
       setBrandFilters({});
-      handleFilter({ brand: [] }); 
+      handleFilter({ }); 
     }
   };
 
@@ -225,7 +237,7 @@ const Sidebar = () => {
       handleFilter({ seller: [seller] });
     } else {
       setSellerFilters({});
-      handleFilter({ seller: [] }); 
+      handleFilter({ }); 
     }
   };
   

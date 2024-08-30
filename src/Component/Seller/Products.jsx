@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Typography, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, IconButton, Button, Checkbox, FormControlLabel, Input, Alert } from '@mui/material';
 import { ArrowBack as ArrowBackIcon, ArrowForward as ArrowForwardIcon, Save as SaveIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { api } from '../../API/Api';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Products = () => {
   const { seller } = useParams(); 
@@ -32,6 +32,7 @@ const Products = () => {
   const [subCategoryPage, setSubCategoryPage] = useState(0);
   const [nestedSubCategoryPage, setNestedSubCategoryPage] = useState(0);
   const imageInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -159,17 +160,35 @@ const Products = () => {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/api/products/${id}`);
+      alert('Product deleted successfully.');
       fetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error);
     }
   };
 
+  const performLogout = async () => {
+    try {
+        const response = await api.post('/logout');
+        alert('Logged out successfully!');
+        if(response){
+          console.log(response);
+          navigate(`/`);
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+  };
+
+
   return (
     <Container maxWidth="md" style={{ marginTop: '20px' }}>
       <Typography variant="h4" gutterBottom align="center">
         Products Dashboard
       </Typography>
+      <Button variant="contained" color="secondary" onClick={performLogout} >
+          Logout
+        </Button>
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
         <Grid container spacing={2} alignItems="center" justifyContent="center">
           <Grid item xs={12}>
@@ -340,7 +359,7 @@ const Products = () => {
       {products.length > 0 ? (
         <Grid container spacing={1}>
         {products.map((product) => (
-          <Grid item xs={12} md={6} key={product.id}>
+          <Grid item xs={12} md={3} key={product.id}>
             <Paper elevation={3} style={{ padding: '15px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
               <div>
               <img src={`data:image/jpeg;base64,${product.encodedImage}`} alt={product.name} style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain', marginTop: '20px' }} />
