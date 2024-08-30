@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Typography, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, IconButton, Button, Checkbox, FormControlLabel, Input } from '@mui/material';
+import { Container, Typography, Paper, Grid, TextField, FormControl, InputLabel, Select, MenuItem, IconButton, Button, Checkbox, FormControlLabel, Input, Alert } from '@mui/material';
 import { ArrowBack as ArrowBackIcon, ArrowForward as ArrowForwardIcon, Save as SaveIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { api } from '../../API/Api';
 import { useParams } from 'react-router-dom';
@@ -59,7 +59,7 @@ const Products = () => {
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      setError('Failed to fetch categories');
+      setError('Failed to fetch categories or categories is empty');
     }
   };
 
@@ -79,7 +79,7 @@ const Products = () => {
       setNestedSubCategories(response.data);
     } catch (error) {
       console.error('Error fetching nested subcategories:', error);
-      setError('Failed to fetch nested subcategories');
+      setError('Failed to fetch nested subcategories or nested subcategories is empty');
     }
   };
 
@@ -331,7 +331,7 @@ const Products = () => {
               <SaveIcon /> Create Product
             </Button>
           </Grid>
-          {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+          {error && <Alert severity="error" className="mt-3">{error}</Alert>}
         </Grid>
       </Paper>
       <Typography variant="h5" gutterBottom>

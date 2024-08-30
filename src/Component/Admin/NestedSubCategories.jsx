@@ -61,7 +61,7 @@ const NestedSubCategories = () => {
 
   const fetchSubCategories = async () => {
     try {
-      const response = await api.get(`/api/subCategories/all-sub-categories?page=${subCategoryPage}`);
+      const response = await api.get(`/api/subcategory-requests/all-sub-categories?page=${subCategoryPage}`);
       setSubCategories(response.data);
     } catch (error) {
       console.error('Error fetching subcategories:', error);
@@ -70,7 +70,7 @@ const NestedSubCategories = () => {
 
   const handleCreate = async () => {
     try {
-      await api.post(`/api/nestedSubCategories`, {
+      await api.post(`/api/admin/nestedSubCategories`, {
         nestedSubCategoryName: newNestedSubCategory,
         subCategoryId: { id: selectedSubCategory }
       });
@@ -83,7 +83,7 @@ const NestedSubCategories = () => {
 
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/nestedSubCategories/${id}`, {
+      await api.put(`/api/admin/nestedSubCategories/${id}`, {
         nestedSubCategoryName: editingName,
         subCategoryId: { id: editingSubCategory }
       });
@@ -97,7 +97,7 @@ const NestedSubCategories = () => {
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/api/nestedSubCategories/${id}`);
+      await api.delete(`/api/admin/nestedSubCategories/${id}`);
       fetchNestedSubCategories();
     } catch (error) {
       console.error('Error deleting nested subcategory:', error);

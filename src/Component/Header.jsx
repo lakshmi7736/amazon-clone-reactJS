@@ -84,7 +84,10 @@ const Header = () =>  {
                     <div className="navbar__footer_text border-hvr">Amazon miniTV</div>
                     <div className="navbar__footer_text border-hvr">
                         <Link to="/signin" style={{ textDecoration: 'none', color: 'inherit' }}>Sell</Link>
-                    </div>                   
+                    </div> 
+                    <div className="navbar__footer_text border-hvr">
+                        <Link to="/adminLogin" style={{ textDecoration: 'none', color: 'inherit' }}>Admin</Link>
+                    </div>                  
                     <div className="navbar__footer_text border-hvr">Best Seller</div>
                     <div className="navbar__footer_text border-hvr">Today's Deals</div>
                     <div className="navbar__footer_text border-hvr">Mobiles</div>
@@ -95,7 +98,6 @@ const Header = () =>  {
                     <div className="navbar__footer_text border-hvr">Fashion</div>
                     <div className="navbar__footer_text border-hvr">New Releases</div>
                     <div className="navbar__footer_text border-hvr">Home & Kitchen</div>
-                    <div className="navbar__footer_text border-hvr">Amazon Pay</div>
                     <div className="navbar__footer_text border-hvr">Computers</div>
                     <div className="navbar__footer_text border-hvr">Gift Ideas</div>
                 </div>

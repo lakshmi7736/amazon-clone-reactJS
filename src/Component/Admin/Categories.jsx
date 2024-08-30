@@ -25,7 +25,7 @@ const Categories = () => {
 
   const handleCreate = async () => {
     try {
-      await api.post(`/api/categories`, { name: newCategory });
+      await api.post(`/api/admin/categories`, { name: newCategory });
       setNewCategory('');
       fetchCategories();
     } catch (error) {
@@ -35,7 +35,7 @@ const Categories = () => {
 
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/categories/${id}`, { name: editingName });
+      await api.put(`/api/admin/categories/${id}`, { name: editingName });
       setEditingCategory(null);
       setEditingName('');
       fetchCategories();
@@ -46,7 +46,7 @@ const Categories = () => {
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/api/categories/${id}`);
+      await api.delete(`/api/admin/categories/${id}`);
       fetchCategories();
     } catch (error) {
       console.error("Error deleting category:", error);

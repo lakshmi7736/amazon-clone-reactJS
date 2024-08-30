@@ -1,9 +1,13 @@
 import './App.css';
 import Header from './Component/Header';
-import {  Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Sidebar from './Component/Sidebar';
 import SignUp from './Component/Seller/SignUp';
 import SignIn from './Component/Seller/SignIn';
+import AdminDashboard from './Component/Admin/AdminDashboard';
+import Adminlogin from './Component/Admin/Adminlogin';
+import Products from './Component/Seller/Products';
+
 
 function App() {
   return (
@@ -24,7 +28,16 @@ function App() {
             </div>
           }
         />
-      {/* <Route path="/products/:seller" element={<Products />} /> */}
+        <Route
+          path="/adminLogin"
+          element={
+            <div className="App">
+              <Adminlogin />
+            </div>
+          }
+        />
+      <Route path='/products/:seller' element={<Products />} />
+      <Route path="/adminDashboard/*" element={<AdminDashboard />} />
         <Route
           path="/"
           element={
@@ -45,5 +58,4 @@ export default App;
 
 
 
- {/* <Route path="/*" element={<AdminDashboard />} /> */}
 

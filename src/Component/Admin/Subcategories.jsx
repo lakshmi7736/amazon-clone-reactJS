@@ -56,7 +56,7 @@ const SubCategories = () => {
   // Fetch categories for the dropdown with pagination
   const fetchCategories = async () => {
     try {
-      const response = await api.get(`/api/categories/all-categories?page=${categoryPage}`);
+      const response = await api.get(`/api/category-requests/all-categories?page=${categoryPage}`);
       setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -75,7 +75,7 @@ const SubCategories = () => {
   // Create subcategory
   const handleCreate = async () => {
     try {
-      await api.post(`/api/subCategories`, {
+      await api.post(`/api/admin/subCategories`, {
         subCategoryName: newSubCategory,
         categoryId: { id: selectedCategory }
       });
@@ -90,7 +90,7 @@ const SubCategories = () => {
   // Update subcategory
   const handleUpdate = async (id) => {
     try {
-      await api.put(`/api/subCategories/${id}`, {
+      await api.put(`/api/admin/subCategories/${id}`, {
         subCategoryName: editingName,
         categoryId: { id: editingCategory }
       });
@@ -106,7 +106,7 @@ const SubCategories = () => {
   // Delete subcategory
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/api/subCategories/${id}`);
+      await api.delete(`/api/admin/subCategories/${id}`);
       fetchSubCategories();
     } catch (error) {
       console.error('Error deleting subcategory:', error);

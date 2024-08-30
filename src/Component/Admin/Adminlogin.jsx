@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../API/Api';
 import styled from 'styled-components';
 import { Button, Form, Container, Row, Col, Alert } from 'react-bootstrap';
@@ -21,15 +21,8 @@ const Title = styled.h2`
     text-align: center;
 `;
 
-const StyledLink = styled(Link)`
-    color: #007bff;
-    &:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-`;
 
-const SignIn = () => {
+const Adminlogin = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -42,10 +35,9 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/api/sellers/signin', formData);
-            const seller = response.data.seller.id;
+            await api.post('/api/users/signin', formData);
             alert('Signed in successfully!');
-            navigate(`/products/${seller}`);
+            navigate(`/adminDashboard`);
         } catch (err) {
             setError(err.response ? err.response.data : 'An error occurred');
         }
@@ -56,7 +48,7 @@ const SignIn = () => {
             <Row className="justify-content-md-center">
                 <Col xs={12} md={6}>
                     <StyledForm onSubmit={handleSubmit}>
-                        <Title>Sign In</Title>
+                        <Title>Admin Sign In</Title>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Control
                                 type="email"
@@ -83,10 +75,9 @@ const SignIn = () => {
                             Sign In
                         </Button>
 
-                        {error && <Alert severity="error" className="mt-3">{error}</Alert>}
-                        <div className="mt-3 text-center">
-                            Don't have an account? <StyledLink to="/signup">Sign Up</StyledLink>
-                        </div>
+                        {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+
+                       
                     </StyledForm>
                 </Col>
             </Row>
@@ -94,4 +85,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default Adminlogin;

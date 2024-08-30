@@ -8,10 +8,7 @@
     margin-top: 50px;
   }
   
-  .sidebar {
-    flex: 0 0 190; /* Sidebar width */
-  } 
-   */
+
   .content {
     flex: 1;
     padding: 20px;
